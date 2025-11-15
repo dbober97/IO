@@ -1,9 +1,17 @@
 package edu.io;
 
+import edu.io.token.EmptyToken;
+import edu.io.token.Token;
+
 public class Board {
 
     public int size = 8;
     private final Token[][] grid = new Token[size][size];
+    public record Coords(int col, int row) {}
+
+    public int size() {
+        return size;
+    }
 
     public Board()
     {
@@ -12,7 +20,7 @@ public class Board {
 
     public void clean()
     {
-        Token t = new Token("・");
+        EmptyToken t = new EmptyToken();
         for(int i = 0; i < size; i++)
         {
             for(int j = 0; j < size; j++) grid[j][i] = t;
@@ -34,9 +42,15 @@ public class Board {
         {
             for(int i = 0; i < size; i++)
             {
-                for(int j = 0; j < size; j++) System.out.print(grid[i][j].label);
-
+                for(int j = 0; j < size; j++) System.out.print(grid[i][j].label());
+                System.out.println("\n");
             }
         }
+    }
+
+    public Token peekToken(int col, int row)
+    {
+        Token t = grid[row][col];
+        return t;
     }
 }
