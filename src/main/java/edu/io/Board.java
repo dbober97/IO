@@ -5,7 +5,7 @@ import edu.io.token.Token;
 
 public class Board {
 
-    public int size = 8;
+    private final int size = 8;
     private final Token[][] grid = new Token[size][size];
     public record Coords(int col, int row) {}
 
@@ -50,7 +50,19 @@ public class Board {
 
     public Token peekToken(int col, int row)
     {
-        Token t = grid[row][col];
-        return t;
+        return grid[row][col];
+    }
+
+    public Coords getAvailableSquare()
+    {
+        //funkcja zwraca wspolrzedne pierwszego nie zajetego pola na planszy
+        for(int row = 0; row < size; row++)
+        {
+            for(int col = 0; col < size; col++)
+            {
+                if (grid[row][col] instanceof EmptyToken) return new Coords(col, row);
+            }
+        }
+        throw new IllegalStateException("Board is full!");
     }
 }

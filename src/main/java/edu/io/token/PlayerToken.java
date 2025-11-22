@@ -1,11 +1,23 @@
 package edu.io.token;
 import edu.io.Board;
+import edu.io.Player;
 
 public class PlayerToken extends Token {
 
-    Board board;
+    private final Board board;
+    private final Player player;
     private int col;
     private int row;
+
+    public Board board()
+    {
+        return board;
+    }
+
+    public Player player()
+    {
+        return player;
+    }
 
     public enum Move{
         NONE,
@@ -15,12 +27,14 @@ public class PlayerToken extends Token {
         DOWN
     }
 
-    public PlayerToken(Board board) {
+    public PlayerToken(Player player, Board board) {
         super(Label.PLAYER_TOKEN_LABEL);
         this.board = board;
-        this.row = 0;
-        this.col = 0;
+        this.player = player;
+        this.row = board.getAvailableSquare().row();
+        this.col = board.getAvailableSquare().col();
         this.board.placeToken(this.col, this.row, this);
+        this.player.assignToken(this);
      }
 
     public void move(Move dir)
@@ -46,7 +60,9 @@ public class PlayerToken extends Token {
                 break;
             }
         }
-        if(newRow < 0 || newRow >= board.size || newCol < 0 || newCol >= board.size()) throw new IllegalArgumentException("Cannot move outside the board");
+        if(newRow < 0 || newRow >= board.size() || newCol < 0 || newCol >= board.size()) throw new IllegalArgumentException("Cannot move outside the board");
+
+        player.interactWithToken(board.peekToken(newCol, newRow));
         board.placeToken(this.col, this.row, new EmptyToken());
         board.placeToken(newCol, newRow, this);
         this.row = newRow;
@@ -56,4 +72,5 @@ public class PlayerToken extends Token {
     public Board.Coords pos(){
         return new Board.Coords(col, row);
     }
+
 }
