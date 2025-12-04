@@ -12,6 +12,17 @@ public class Player {
         this.pToken = pToken;
     }
 
+    private void usePickaxeOnGold(PickaxeToken p, GoldToken g)
+    {
+        if (p.isBroken()) {
+            shed.dropTool();
+            gold.gain(g.amount());
+        } else {
+            gold.gain(g.amount() * p.gainFactor());
+            p.use();
+        }
+    }
+
     public PlayerToken token()
     {
         return pToken;
@@ -28,15 +39,8 @@ public class Player {
             case GoldToken g-> {
                 System.out.println("GOLD!");
                 Tool tl = shed.getTool();
-                if (tl instanceof PickaxeToken p) {
-                    if (p.isBroken()) {
-                        shed.dropTool();
-                        gold.gain(g.amount());
-                    } else {
-                        gold.gain(g.amount() * p.gainFactor());
-                        p.use();
-                    }
-                } else this.gold.gain(g.amount());
+                if (tl instanceof PickaxeToken p) usePickaxeOnGold(p, g);
+                else this.gold.gain(g.amount());
             }
             case AnvilToken a-> {
                 if(shed.getTool() instanceof Repairable tool)
