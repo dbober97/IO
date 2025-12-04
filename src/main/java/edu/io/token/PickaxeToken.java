@@ -7,7 +7,7 @@ public class PickaxeToken extends Token implements Tool, Repairable{
     private final int initialDurability;
 
     private enum State { WORKING, BROKEN, IDLE }
-    private State lastState = State.IDLE;
+    private State lastState;
 
     public PickaxeToken()
     {
@@ -28,6 +28,7 @@ public class PickaxeToken extends Token implements Tool, Repairable{
             this.gainFactor = gainFactor;
             this.durability = durability;
             this.initialDurability = durability;
+            this.lastState = State.IDLE;
         }
     }
 
@@ -64,7 +65,6 @@ public class PickaxeToken extends Token implements Tool, Repairable{
             if(isBroken()) lastState = State.BROKEN;
             else {
                 lastState = State.WORKING;
-                durability -= 1;
             }
         }
         else lastState = State.IDLE;
@@ -74,7 +74,10 @@ public class PickaxeToken extends Token implements Tool, Repairable{
     @Override
     public Tool ifWorking(Runnable r)
     {
-        if(lastState == State.WORKING) r.run();
+        if(lastState == State.WORKING) {
+            r.run();
+            use();
+        }
         return this;
     }
 

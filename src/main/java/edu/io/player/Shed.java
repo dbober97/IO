@@ -37,7 +37,7 @@ public class Shed {
 
     public void dropTool()
     {
-        tools.removeLast();
+        if(!tools.isEmpty()) tools.removeLast();
     }
 
 

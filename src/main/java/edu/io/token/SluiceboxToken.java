@@ -5,13 +5,14 @@ public class SluiceboxToken extends Token implements Tool{
     private double gainFactor;
     private int durability;
     private enum State { WORKING, BROKEN, IDLE }
-    private State lastState = State.IDLE;
+    private State lastState;
 
     public SluiceboxToken()
     {
         super(Label.SLUICEBOX_TOKEN_LABEL);
         gainFactor = 1.2;
         durability = 5;
+        lastState = State.IDLE;
     }
 
     public double gainFactor()
@@ -24,7 +25,7 @@ public class SluiceboxToken extends Token implements Tool{
         return durability;
     }
 
-    public void use()
+    private void use()
     {
         durability -= 1;
         switch(durability){
@@ -32,6 +33,7 @@ public class SluiceboxToken extends Token implements Tool{
             case 3: {gainFactor = Double.parseDouble("1.12"); break; }
             case 2: {gainFactor = Double.parseDouble("1.08"); break; }
             case 1: {gainFactor = Double.parseDouble("1.04"); break; }
+            case 0: {gainFactor = Double.parseDouble("1"); break; }
         };
     }
 
@@ -42,13 +44,6 @@ public class SluiceboxToken extends Token implements Tool{
             if(isBroken()) lastState = State.BROKEN;
             else {
                 lastState = State.WORKING;
-                durability -= 1;
-                switch(durability){
-                    case 4: {gainFactor = Double.parseDouble("1.16"); break;}
-                    case 3: {gainFactor = Double.parseDouble("1.12"); break; }
-                    case 2: {gainFactor = Double.parseDouble("1.08"); break; }
-                    case 1: {gainFactor = Double.parseDouble("1.04"); break; }
-                };
             }
         }
         else lastState = State.IDLE;
@@ -57,7 +52,10 @@ public class SluiceboxToken extends Token implements Tool{
 
     public Tool ifWorking(Runnable r)
     {
-        if(lastState == State.WORKING) r.run();
+        if(lastState == State.WORKING) {
+            r.run();
+            use();
+        }
         return this;
     }
 
@@ -77,7 +75,7 @@ public class SluiceboxToken extends Token implements Tool{
 
     public boolean isBroken()
     {
-        return durability <= 0 || gainFactor < 1.04;
+        return durability <= 0;
     }
 
 }

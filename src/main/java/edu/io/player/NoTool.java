@@ -32,6 +32,6 @@ public class NoTool implements Tool {
     @Override
     public boolean isBroken()
     {
-        return false;
+        return true;
     }
 }
