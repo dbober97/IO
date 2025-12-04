@@ -1,34 +1,17 @@
 package edu.io.token;
 
-public class PickaxeToken extends Token implements Tool, Repairable{
+public class SluiceboxToken extends Token implements Tool{
 
-    private final double gainFactor;
+    private double gainFactor;
     private int durability;
-    private final int initialDurability;
-
     private enum State { WORKING, BROKEN, IDLE }
     private State lastState = State.IDLE;
 
-    public PickaxeToken()
+    public SluiceboxToken()
     {
-        this(1.5, 3);
-    }
-
-    public PickaxeToken(double gainFactor)
-    {
-        this(gainFactor, 3);
-    }
-
-    public PickaxeToken(double gainFactor, int durability) {
-        super(Label.PICKAXE_TOKEN_LABEL);
-        if (durability <= 0) throw new IllegalArgumentException("Durability cannot be negative!");
-        else if(gainFactor <= 0) throw new IllegalArgumentException("GainFactor cannot be negative!");
-        else {
-
-            this.gainFactor = gainFactor;
-            this.durability = durability;
-            this.initialDurability = durability;
-        }
+        super(Label.SLUICEBOX_TOKEN_LABEL);
+        gainFactor = 1.2;
+        durability = 5;
     }
 
     public double gainFactor()
@@ -36,25 +19,20 @@ public class PickaxeToken extends Token implements Tool, Repairable{
         return gainFactor;
     }
 
-    public double durability()
+    public int durability()
     {
         return durability;
-    }
-
-    public double initialDurability()
-    {
-        return initialDurability;
     }
 
     public void use()
     {
         durability -= 1;
-    }
-
-    @Override
-    public boolean isBroken()
-    {
-        return durability <= 0;
+        switch(durability){
+            case 4: {gainFactor = Double.parseDouble("1.16"); break;}
+            case 3: {gainFactor = Double.parseDouble("1.12"); break; }
+            case 2: {gainFactor = Double.parseDouble("1.08"); break; }
+            case 1: {gainFactor = Double.parseDouble("1.04"); break; }
+        };
     }
 
     @Override
@@ -65,13 +43,18 @@ public class PickaxeToken extends Token implements Tool, Repairable{
             else {
                 lastState = State.WORKING;
                 durability -= 1;
+                switch(durability){
+                    case 4: {gainFactor = Double.parseDouble("1.16"); break;}
+                    case 3: {gainFactor = Double.parseDouble("1.12"); break; }
+                    case 2: {gainFactor = Double.parseDouble("1.08"); break; }
+                    case 1: {gainFactor = Double.parseDouble("1.04"); break; }
+                };
             }
         }
         else lastState = State.IDLE;
         return this;
     }
 
-    @Override
     public Tool ifWorking(Runnable r)
     {
         if(lastState == State.WORKING) r.run();
@@ -92,8 +75,9 @@ public class PickaxeToken extends Token implements Tool, Repairable{
         return this;
     }
 
-    public void repair()
+    public boolean isBroken()
     {
-        durability = initialDurability;
+        return durability <= 0 || gainFactor < 1.04;
     }
+
 }

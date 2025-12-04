@@ -23,6 +23,17 @@ public class Player {
         }
     }
 
+    private void useSluiceboxOnGold(SluiceboxToken s, GoldToken g)
+    {
+        if (s.isBroken()) {
+            shed.dropTool();
+            gold.gain(g.amount());
+        } else {
+            gold.gain(g.amount() * s.gainFactor());
+            s.use();
+        }
+    }
+
     public PlayerToken token()
     {
         return pToken;
@@ -37,9 +48,10 @@ public class Player {
                 shed.add(tl);
             }
             case GoldToken g-> {
-                System.out.println("GOLD!");
+                System.out.println("GOLD! (value " + g.amount() + ")");
                 Tool tl = shed.getTool();
                 if (tl instanceof PickaxeToken p) usePickaxeOnGold(p, g);
+                else if (tl instanceof SluiceboxToken s) useSluiceboxOnGold(s, g);
                 else this.gold.gain(g.amount());
             }
             case AnvilToken a-> {
