@@ -1,8 +1,7 @@
 package edu.io;
 
-import edu.io.token.GoldToken;
-import edu.io.token.PlayerToken;
-import edu.io.token.PyriteToken;
+import edu.io.player.Player;
+import edu.io.token.*;
 
 import java.util.Scanner;
 
@@ -23,7 +22,10 @@ public class Game {
         board = new Board();
         board.placeToken(0,0, new GoldToken(10));
         board.placeToken(5,3, new GoldToken(20));
+        board.placeToken(2,4, new GoldToken(20));
         board.placeToken(7,0, new PyriteToken());
+        board.placeToken(2,3, new PickaxeToken());
+        board.placeToken(4,4, new AnvilToken());
     }
 
     public void join(Player player)
@@ -80,7 +82,7 @@ public class Game {
                 System.out.println("Cannot move outside the board, try again!");
             }
             System.out.println("col: " + player.token().pos().col() + " row: " + player.token().pos().row() + "\n");
-            System.out.println("gold amount: " + player.gold()+ "\n");
+            System.out.println("gold amount: " + player.gold.amount()+ "\n");
         }
     }
 }
