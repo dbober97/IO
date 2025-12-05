@@ -28,7 +28,7 @@ public class SluiceboxToken extends Token implements Tool{
     private void use()
     {
         durability -= 1;
-        switch(durability){
+        switch(durability){//zwykłe odejmowanie wartości "0,04" dawało nieodpowiednie wyniki
             case 4: {gainFactor = Double.parseDouble("1.16"); break;}
             case 3: {gainFactor = Double.parseDouble("1.12"); break; }
             case 2: {gainFactor = Double.parseDouble("1.08"); break; }

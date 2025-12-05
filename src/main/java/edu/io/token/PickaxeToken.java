@@ -4,7 +4,7 @@ public class PickaxeToken extends Token implements Tool, Repairable{
 
     private final double gainFactor;
     private int durability;
-    private final int initialDurability;
+    private final int initialDurability;//zmienna przechowuje początkowe durability, które można przywrócić w razie naprawy
 
     private enum State { WORKING, BROKEN, IDLE }
     private State lastState;

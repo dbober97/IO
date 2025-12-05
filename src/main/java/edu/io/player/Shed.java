@@ -7,7 +7,7 @@ import java.util.Stack;
 public class Shed {
     private final Stack<Tool> tools = new Stack<>();
 
-    public int toolsAmount()
+    public int toolsAmount()//metoda wykorzystywana w klasie Game - do wyświetlania narzędzi
     {
         return tools.size();
     }
@@ -29,7 +29,7 @@ public class Shed {
         else return tools.peek();
     }
 
-    public Tool getToolAt(int index)
+    public Tool getToolAt(int index)//metoda wykorzystywana w klasie Game - do wyświetlania narzędzi
     {
         if(tools.isEmpty() || index < 0) return new NoTool();
         else return tools.get(index);

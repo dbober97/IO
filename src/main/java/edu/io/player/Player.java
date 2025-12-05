@@ -22,7 +22,6 @@ public class Player {
                     if(tl instanceof SluiceboxToken st) {
                         gold.gain(g.amount() * st.gainFactor());
                     }
-
                 })
                 .ifBroken(() -> {
                     shed.dropTool();
@@ -61,7 +60,7 @@ public class Player {
                 else gold.gain(g.amount());
             }
             case AnvilToken a-> {
-                if(shed.getTool() instanceof Repairable tool) tool.repair();
+                if(shed.getTool() instanceof Repairable tool) tool.repair();//próbuje naprawić tylko ostatnie narzędzie, nie ważne czy się da
             }
             default -> {}
         }
