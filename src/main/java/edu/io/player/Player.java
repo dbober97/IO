@@ -6,9 +6,11 @@ public class Player {
     private PlayerToken pToken = null;
     public final Gold gold = new Gold();
     public final Shed shed = new Shed();
+    public final Vitals vitals = new Vitals();
 
     public void assignToken(PlayerToken pToken)
     {
+        if(pToken == null) throw new NullPointerException("Token cannot be null!");
         this.pToken = pToken;
     }
 
@@ -47,12 +49,14 @@ public class Player {
 
     public void interactWithToken(Token token)
     {
+        if(!vitals.isAlive()) throw new IllegalStateException("You are dead.");
         switch (token)
         {
             case Tool tl-> {
                 shed.add(tl);
             }
             case GoldToken g-> {
+                vitals.dehydrate(VitalsValues.DEHYDRATION_GOLD);
                 System.out.println("GOLD! (value " + g.amount() + ")");
                 Tool tl = shed.getTool();
                 if(tl instanceof PickaxeToken pt) usePickaxeOnGold(pt, g);
@@ -60,9 +64,13 @@ public class Player {
                 else gold.gain(g.amount());
             }
             case AnvilToken a-> {
+                vitals.dehydrate(VitalsValues.DEHYDRATION_ANVIL);
                 if(shed.getTool() instanceof Repairable tool) tool.repair();//próbuje naprawić tylko ostatnie narzędzie, nie ważne czy się da
             }
-            default -> {}
+            case WaterToken w->{
+                vitals.hydrate(w.amount());
+            }
+            default -> {vitals.dehydrate(VitalsValues.DEHYDRATION_MOVE);}
         }
     }
 }

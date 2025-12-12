@@ -38,6 +38,7 @@ public class Game {
         board.placeToken(7,7, new PickaxeToken());
         board.placeToken(4,4, new AnvilToken());
         board.placeToken(0,7, new SluiceboxToken());
+        board.placeToken(3,1, new WaterToken());
     }
 
     public void join(Player player)
@@ -45,6 +46,9 @@ public class Game {
         this.player = player;
         PlayerToken p = new PlayerToken(player, board); //tworzymy pionek reprezentujacy gracza (i ustawiamy na pierwszym wolnym miejscu)
         this.player.assignToken(p); //przypisujemy graczowi nowo utworzony pionek
+        player.vitals.setOnDeathHandler(() -> {
+            System.out.println("To koniec: pełne odwodnienie.");
+        });
 
     }
 
@@ -101,7 +105,10 @@ public class Game {
             {
                 System.out.println("Cannot move outside the board, try again!");
             }
-
+            catch(IllegalStateException e)
+            {
+                System.err.println("At this moment you are dead. Cannot move.");
+            }
             if(showInfo) {
                 System.out.println("col: " + player.token().pos().col() + " row: " + player.token().pos().row() + "\n");
                 System.out.println("gold amount: " + player.gold.amount() + "\n");

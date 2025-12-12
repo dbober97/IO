@@ -62,7 +62,7 @@ public class PlayerToken extends Token {
         }
         if(newRow < 0 || newRow >= board.size() || newCol < 0 || newCol >= board.size()) throw new IllegalArgumentException("Cannot move outside the board");
 
-        player.interactWithToken(board.peekToken(newCol, newRow));
+        if(newRow != row || newCol != col) player.interactWithToken(board.peekToken(newCol, newRow));
         board.placeToken(this.col, this.row, new EmptyToken());
         board.placeToken(newCol, newRow, this);
         this.row = newRow;

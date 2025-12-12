@@ -7,4 +7,5 @@ public class Label {
     public static final String PICKAXE_TOKEN_LABEL = "⛏";
     public static final String ANVIL_TOKEN_LABEL = "⮽";
     public static final String SLUICEBOX_TOKEN_LABEL = "亘";
+    public static final String WATER_TOKEN_LABEL = "w";
 }
